@@ -15,19 +15,19 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { signOut } from '@/services/auth'
 
 const pageTitles: { [key: string]: string } = {
-  '/app/dashboard': 'Dashboard',
-  '/app/inbox': 'Caixa de Entrada',
-  '/app/contacts': 'Contatos',
-  '/app/deals': 'Funil de Vendas',
-  '/app/queues': 'Filas',
-  '/app/catalog': 'Catálogo',
-  '/app/tasks': 'Tarefas',
-  '/app/broadcasts': 'Disparos',
-  '/app/reports': 'Relatórios',
-  '/app/automations': 'Automações',
-  '/app/settings': 'Configurações',
-  '/app/canned-responses': 'Respostas Rápidas',
-  '/app/quick-message': 'Enviar Mensagem',
+  '/': 'Dashboard',
+  '/inbox': 'Caixa de Entrada',
+  '/contacts': 'Contatos',
+  '/deals': 'Funil de Vendas',
+  '/queues': 'Filas',
+  '/catalog': 'Catálogo',
+  '/tasks': 'Tarefas',
+  '/broadcasts': 'Disparos',
+  '/reports': 'Relatórios',
+  '/automations': 'Automações',
+  '/settings': 'Configurações',
+  '/canned-responses': 'Respostas Rápidas',
+  '/quick-message': 'Enviar Mensagem',
 }
 
 export const AppHeader = () => {
@@ -38,7 +38,7 @@ export const AppHeader = () => {
 
   const handleLogout = async () => {
     await signOut()
-    navigate('/')
+    navigate('/login')
   }
 
   return (

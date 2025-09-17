@@ -35,22 +35,22 @@ import {
 import { signOut } from '@/services/auth'
 
 const menuItems = [
-  { path: '/app/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-  { path: '/app/inbox', icon: Inbox, label: 'Caixa de Entrada' },
-  { path: '/app/contacts', icon: Users, label: 'Contatos' },
-  { path: '/app/deals', icon: Filter, label: 'Funil de Vendas' },
-  { path: '/app/queues', icon: UsersRound, label: 'Filas' },
-  { path: '/app/catalog', icon: Book, label: 'Catálogo' },
-  { path: '/app/tasks', icon: ListTodo, label: 'Tarefas' },
-  { path: '/app/canned-responses', icon: Zap, label: 'Respostas Rápidas' },
+  { path: '/', icon: LayoutDashboard, label: 'Dashboard' },
+  { path: '/inbox', icon: Inbox, label: 'Caixa de Entrada' },
+  { path: '/contacts', icon: Users, label: 'Contatos' },
+  { path: '/deals', icon: Filter, label: 'Funil de Vendas' },
+  { path: '/queues', icon: UsersRound, label: 'Filas' },
+  { path: '/catalog', icon: Book, label: 'Catálogo' },
+  { path: '/tasks', icon: ListTodo, label: 'Tarefas' },
+  { path: '/canned-responses', icon: Zap, label: 'Respostas Rápidas' },
   {
-    path: '/app/quick-message',
+    path: '/quick-message',
     icon: MessageSquarePlus,
     label: 'Enviar Mensagem',
   },
-  { path: '/app/broadcasts', icon: Send, label: 'Disparos' },
-  { path: '/app/reports', icon: BarChart3, label: 'Relatórios' },
-  { path: '/app/automations', icon: Bot, label: 'Automações' },
+  { path: '/broadcasts', icon: Send, label: 'Disparos' },
+  { path: '/reports', icon: BarChart3, label: 'Relatórios' },
+  { path: '/automations', icon: Bot, label: 'Automações' },
 ]
 
 export const AppSidebar = () => {
@@ -59,14 +59,21 @@ export const AppSidebar = () => {
 
   const handleLogout = async () => {
     await signOut()
-    navigate('/')
+    navigate('/login')
+  }
+
+  const isLinkActive = (path: string) => {
+    if (path === '/') {
+      return location.pathname === '/'
+    }
+    return location.pathname.startsWith(path)
   }
 
   return (
     <Sidebar>
       <SidebarContent className="flex flex-col">
         <SidebarHeader>
-          <Link to="/app/dashboard" className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2">
             <img
               src="https://img.usecurling.com/i?q=saas-omnichannel&color=gradient"
               alt="Logo"
@@ -80,7 +87,7 @@ export const AppSidebar = () => {
             <SidebarMenuItem key={item.path}>
               <SidebarMenuButton
                 asChild
-                isActive={location.pathname.startsWith(item.path)}
+                isActive={isLinkActive(item.path)}
                 tooltip={item.label}
               >
                 <Link to={item.path}>
@@ -96,10 +103,10 @@ export const AppSidebar = () => {
             <SidebarMenuItem>
               <SidebarMenuButton
                 asChild
-                isActive={location.pathname.startsWith('/app/settings')}
+                isActive={isLinkActive('/settings')}
                 tooltip="Configurações"
               >
-                <Link to="/app/settings">
+                <Link to="/settings">
                   <Settings className="h-5 w-5" />
                   <span>Configurações</span>
                 </Link>

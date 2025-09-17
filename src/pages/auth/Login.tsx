@@ -52,7 +52,7 @@ export default function LoginPage() {
         email: data.email,
         password: data.password,
       })
-      navigate('/app/dashboard')
+      navigate('/')
     } catch (error: any) {
       toast({
         variant: 'destructive',

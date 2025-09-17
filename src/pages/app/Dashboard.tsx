@@ -28,6 +28,7 @@ import {
   DollarSign,
   Users,
   MessageSquare,
+  Phone,
 } from 'lucide-react'
 import {
   Table,
@@ -38,6 +39,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
+import { Link } from 'react-router-dom'
 
 const funnelData = [
   { stage: 'Novos Leads', value: 120, fill: 'hsl(var(--chart-1))' },
@@ -73,8 +75,14 @@ const recentActivities = [
 ]
 
 export default function DashboardPage() {
+  // TODO: Implement role-based content display
+  // Example:
+  // const { user } = useAuth()
+  // const userRole = fetchUserRole(user.id)
+  // {userRole === 'admin' && <AdminDashboard />}
+
   return (
-    <div className="flex-1 space-y-4 p-4 md:p-8 pt-6 animate-fade-in-up">
+    <div className="flex-1 space-y-6 p-4 md:p-6 animate-fade-in-up">
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -185,42 +193,66 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
-      <Card>
-        <CardHeader className="flex flex-row items-center">
-          <div className="grid gap-2">
-            <CardTitle>Atividades Recentes</CardTitle>
-            <CardDescription>
-              Últimas ações realizadas na plataforma.
-            </CardDescription>
-          </div>
-          <Button asChild size="sm" className="ml-auto gap-1">
-            <a href="#">
-              Ver Todas
-              <ArrowUpRight className="h-4 w-4" />
-            </a>
-          </Button>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Descrição</TableHead>
-                <TableHead className="text-right">Horário</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {recentActivities.map((activity, index) => (
-                <TableRow key={index}>
-                  <TableCell>
-                    <div className="font-medium">{activity.description}</div>
-                  </TableCell>
-                  <TableCell className="text-right">{activity.time}</TableCell>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        <Card className="col-span-full lg:col-span-4">
+          <CardHeader className="flex flex-row items-center">
+            <div className="grid gap-2">
+              <CardTitle>Atividades Recentes</CardTitle>
+              <CardDescription>
+                Últimas ações realizadas na plataforma.
+              </CardDescription>
+            </div>
+            <Button asChild size="sm" className="ml-auto gap-1">
+              <Link to="/activities">
+                Ver Todas
+                <ArrowUpRight className="h-4 w-4" />
+              </Link>
+            </Button>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Descrição</TableHead>
+                  <TableHead className="text-right">Horário</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+              </TableHeader>
+              <TableBody>
+                {recentActivities.map((activity, index) => (
+                  <TableRow key={index}>
+                    <TableCell>
+                      <div className="font-medium">{activity.description}</div>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {activity.time}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+        <Card className="col-span-full lg:col-span-3">
+          <CardHeader>
+            <CardTitle>Ações Rápidas</CardTitle>
+            <CardDescription>
+              Atalhos para as funcionalidades mais usadas.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Button asChild className="w-full">
+              <Link to="/contacts/new">
+                <Users className="mr-2 h-4 w-4" /> Novo Contato
+              </Link>
+            </Button>
+            <Button asChild variant="outline" className="w-full">
+              <Link to="/settings/integrations/whatsapp">
+                <Phone className="mr-2 h-4 w-4" /> Integrar WhatsApp
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }

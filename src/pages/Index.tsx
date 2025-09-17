@@ -1,5 +1,5 @@
-import LoginPage from './auth/Login'
-
+// This file is no longer used by the application and can be removed.
+// The routing logic is now handled in App.tsx with ProtectedRoute.
 export default function Index() {
-  return <LoginPage />
+  return null
 }
