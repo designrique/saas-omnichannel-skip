@@ -22,6 +22,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Loader2 } from 'lucide-react'
 import { useToast } from '@/components/ui/use-toast'
+import { signUp } from '@/services/auth'
 
 const registerSchema = z
   .object({
@@ -54,17 +55,33 @@ export default function RegisterPage() {
     },
   })
 
-  const onSubmit = (data: RegisterFormValues) => {
-    console.log(data)
+  const onSubmit = async (data: RegisterFormValues) => {
     setIsLoading(true)
-    setTimeout(() => {
-      setIsLoading(false)
+    try {
+      await signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          data: {
+            name: data.name,
+          },
+        },
+      })
       toast({
         title: 'Conta criada com sucesso!',
-        description: 'Você será redirecionado para a tela de login.',
+        description: 'Verifique seu e-mail para confirmar sua conta.',
       })
       navigate('/')
-    }, 1500)
+    } catch (error: any) {
+      toast({
+        variant: 'destructive',
+        title: 'Erro no registro',
+        description:
+          error.message || 'Ocorreu um erro. Por favor, tente novamente.',
+      })
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (

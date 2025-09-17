@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   Sidebar,
   SidebarContent,
@@ -32,6 +32,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { signOut } from '@/services/auth'
 
 const menuItems = [
   { path: '/app/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
@@ -54,6 +55,12 @@ const menuItems = [
 
 export const AppSidebar = () => {
   const location = useLocation()
+  const navigate = useNavigate()
+
+  const handleLogout = async () => {
+    await signOut()
+    navigate('/')
+  }
 
   return (
     <Sidebar>
@@ -123,7 +130,9 @@ export const AppSidebar = () => {
                   <DropdownMenuItem>Meu Perfil</DropdownMenuItem>
                   <DropdownMenuItem>Configurações da Conta</DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>Sair</DropdownMenuItem>
+                  <DropdownMenuItem onSelect={handleLogout}>
+                    Sair
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </SidebarMenuItem>

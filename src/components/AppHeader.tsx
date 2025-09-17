@@ -11,7 +11,8 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useSidebar } from '@/components/ui/sidebar'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { signOut } from '@/services/auth'
 
 const pageTitles: { [key: string]: string } = {
   '/app/dashboard': 'Dashboard',
@@ -32,7 +33,13 @@ const pageTitles: { [key: string]: string } = {
 export const AppHeader = () => {
   const { toggleSidebar } = useSidebar()
   const location = useLocation()
+  const navigate = useNavigate()
   const title = pageTitles[location.pathname] || 'SaaS Omnichannel'
+
+  const handleLogout = async () => {
+    await signOut()
+    navigate('/')
+  }
 
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
@@ -84,7 +91,7 @@ export const AppHeader = () => {
           <DropdownMenuItem>Meu Perfil</DropdownMenuItem>
           <DropdownMenuItem>Configurações da Conta</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Sair</DropdownMenuItem>
+          <DropdownMenuItem onSelect={handleLogout}>Sair</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>

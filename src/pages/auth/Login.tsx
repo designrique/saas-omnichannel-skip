@@ -21,6 +21,8 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Eye, EyeOff, Loader2 } from 'lucide-react'
+import { useToast } from '@/components/ui/use-toast'
+import { signIn } from '@/services/auth'
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Por favor, insira um e-mail válido.' }),
@@ -31,6 +33,7 @@ type LoginFormValues = z.infer<typeof loginSchema>
 
 export default function LoginPage() {
   const navigate = useNavigate()
+  const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
 
@@ -42,13 +45,23 @@ export default function LoginPage() {
     },
   })
 
-  const onSubmit = (data: LoginFormValues) => {
-    console.log(data)
+  const onSubmit = async (data: LoginFormValues) => {
     setIsLoading(true)
-    setTimeout(() => {
-      setIsLoading(false)
+    try {
+      await signIn({
+        email: data.email,
+        password: data.password,
+      })
       navigate('/app/dashboard')
-    }, 1500)
+    } catch (error: any) {
+      toast({
+        variant: 'destructive',
+        title: 'Erro no login',
+        description: 'Credenciais inválidas. Verifique seu e-mail e senha.',
+      })
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
