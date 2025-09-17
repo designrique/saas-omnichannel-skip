@@ -14,15 +14,20 @@ interface CustomSignUpCredentials extends SignUpWithPasswordCredentials {
 }
 
 export const signUp = async (credentials: CustomSignUpCredentials) => {
-  const { data, error } = await supabase.auth.signUp({
-    email: credentials.email,
-    password: credentials.password,
-    options: {
+  const { email, password } = credentials
+  const name = credentials.options?.data?.name
+
+  const signUpCredentials: SignUpWithPasswordCredentials = { email, password }
+
+  if (name) {
+    signUpCredentials.options = {
       data: {
-        full_name: credentials.options?.data?.name,
+        full_name: name,
       },
-    },
-  })
+    }
+  }
+
+  const { data, error } = await supabase.auth.signUp(signUpCredentials)
 
   if (error) {
     throw error
