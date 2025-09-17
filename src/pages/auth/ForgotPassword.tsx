@@ -22,6 +22,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Loader2 } from 'lucide-react'
 import { useToast } from '@/components/ui/use-toast'
+import { resetPasswordForEmail } from '@/services/auth'
 
 const forgotPasswordSchema = z.object({
   email: z.string().email({ message: 'Por favor, insira um e-mail válido.' }),
@@ -41,17 +42,26 @@ export default function ForgotPasswordPage() {
     },
   })
 
-  const onSubmit = (data: ForgotPasswordFormValues) => {
-    console.log(data)
+  const onSubmit = async (data: ForgotPasswordFormValues) => {
     setIsLoading(true)
-    setTimeout(() => {
-      setIsLoading(false)
+    try {
+      await resetPasswordForEmail(data.email)
       toast({
         title: 'Link enviado!',
         description: 'Verifique sua caixa de entrada para redefinir sua senha.',
       })
       navigate('/')
-    }, 1500)
+    } catch (error: any) {
+      toast({
+        variant: 'destructive',
+        title: 'Erro ao enviar e-mail',
+        description:
+          error.message ||
+          'Não foi possível enviar o link de redefinição. Tente novamente.',
+      })
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
