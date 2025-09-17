@@ -50,7 +50,7 @@ export default function ForgotPasswordPage() {
         title: 'Link enviado!',
         description: 'Verifique sua caixa de entrada para redefinir sua senha.',
       })
-      navigate('/')
+      navigate('/login')
     } catch (error: any) {
       toast({
         variant: 'destructive',
@@ -108,7 +108,10 @@ export default function ForgotPasswordPage() {
           </Form>
           <div className="mt-4 text-center text-sm">
             Lembrou sua senha?{' '}
-            <Link to="/" className="font-semibold text-primary hover:underline">
+            <Link
+              to="/login"
+              className="font-semibold text-primary hover:underline"
+            >
               Faça login
             </Link>
           </div>

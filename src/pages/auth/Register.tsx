@@ -71,7 +71,7 @@ export default function RegisterPage() {
         title: 'Conta criada com sucesso!',
         description: 'Verifique seu e-mail para confirmar sua conta.',
       })
-      navigate('/')
+      navigate('/login')
     } catch (error: any) {
       toast({
         variant: 'destructive',
@@ -170,7 +170,10 @@ export default function RegisterPage() {
           </Form>
           <div className="mt-4 text-center text-sm">
             Já tem uma conta?{' '}
-            <Link to="/" className="font-semibold text-primary hover:underline">
+            <Link
+              to="/login"
+              className="font-semibold text-primary hover:underline"
+            >
               Faça login
             </Link>
           </div>
