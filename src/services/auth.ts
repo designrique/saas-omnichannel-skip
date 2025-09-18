@@ -4,30 +4,8 @@ import type {
   SignUpWithPasswordCredentials,
 } from '@supabase/supabase-js'
 
-interface CustomSignUpCredentials extends SignUpWithPasswordCredentials {
-  options?: {
-    data?: {
-      [key: string]: any
-      name?: string
-    }
-  }
-}
-
-export const signUp = async (credentials: CustomSignUpCredentials) => {
-  const { email, password } = credentials
-  const name = credentials.options?.data?.name
-
-  const signUpCredentials: SignUpWithPasswordCredentials = { email, password }
-
-  if (name) {
-    signUpCredentials.options = {
-      data: {
-        full_name: name,
-      },
-    }
-  }
-
-  const { data, error } = await supabase.auth.signUp(signUpCredentials)
+export const signUp = async (credentials: SignUpWithPasswordCredentials) => {
+  const { data, error } = await supabase.auth.signUp(credentials)
 
   if (error) {
     throw error
