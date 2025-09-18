@@ -65,6 +65,7 @@ export default function RegisterPage() {
           data: {
             full_name: data.name,
           },
+          emailRedirectTo: `${window.location.origin}/login`,
         },
       })
       toast({
