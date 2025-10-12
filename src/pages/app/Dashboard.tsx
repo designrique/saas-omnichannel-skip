@@ -45,6 +45,7 @@ import { useAuth } from '@/contexts/AuthProvider'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
+import { AdminDashboardSection } from '@/components/AdminDashboardSection'
 
 const funnelData = [
   { stage: 'Novos Leads', value: 120, fill: 'hsl(var(--chart-1))' },
@@ -329,6 +330,7 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+      {profile.role === 'admin' && <AdminDashboardSection />}
     </div>
   )
 }
