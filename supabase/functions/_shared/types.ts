@@ -14,6 +14,7 @@ export type Database = {
           created_at: string
           full_name: string | null
           id: string
+          role: Database['public']['Enums']['user_role_enum']
           subscription_status:
             | Database['public']['Enums']['subscription_status_enum']
             | null
@@ -23,6 +24,7 @@ export type Database = {
           created_at?: string
           full_name?: string | null
           id: string
+          role?: Database['public']['Enums']['user_role_enum']
           subscription_status?:
             | Database['public']['Enums']['subscription_status_enum']
             | null
@@ -32,6 +34,7 @@ export type Database = {
           created_at?: string
           full_name?: string | null
           id?: string
+          role?: Database['public']['Enums']['user_role_enum']
           subscription_status?:
             | Database['public']['Enums']['subscription_status_enum']
             | null
@@ -56,6 +59,7 @@ export type Database = {
     }
     Enums: {
       subscription_status_enum: 'free' | 'pro' | 'inactive'
+      user_role_enum: 'user' | 'admin'
     }
     CompositeTypes: {
       [_ in never]: never

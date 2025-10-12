@@ -6,6 +6,7 @@ export type Profile = {
   id: string
   full_name: string | null
   subscription_status: 'free' | 'pro' | 'inactive' | null
+  role: 'user' | 'admin' | null
 }
 
 type AuthContextType = {

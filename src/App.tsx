@@ -11,6 +11,8 @@ import DashboardPage from './pages/app/Dashboard'
 import { AuthProvider } from './contexts/AuthProvider'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { PublicRoute } from './components/PublicRoute'
+import { AdminRoute } from './components/AdminRoute'
+import AdminDashboardPage from './pages/app/AdminDashboard'
 
 const PlaceholderPage = ({ title }: { title: string }) => (
   <div className="flex items-center justify-center h-full">
@@ -101,6 +103,9 @@ const App = () => (
                 path="/settings"
                 element={<PlaceholderPage title="Configurações" />}
               />
+              <Route element={<AdminRoute />}>
+                <Route path="/admin" element={<AdminDashboardPage />} />
+              </Route>
             </Route>
           </Route>
 

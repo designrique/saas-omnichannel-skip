@@ -22,6 +22,7 @@ import {
   Settings,
   MessageSquarePlus,
   Zap,
+  Shield,
 } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
@@ -109,6 +110,20 @@ export const AppSidebar = () => {
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
+          {profile?.role === 'admin' && (
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                asChild
+                isActive={isLinkActive('/admin')}
+                tooltip="Painel Admin"
+              >
+                <Link to="/admin">
+                  <Shield className="h-5 w-5" />
+                  <span>Painel Admin</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )}
         </SidebarMenu>
         <SidebarFooter>
           <SidebarMenu>
