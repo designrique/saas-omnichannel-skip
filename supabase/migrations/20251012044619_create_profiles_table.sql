@@ -1,5 +1,10 @@
 -- Create a custom enum type for subscription status
-CREATE TYPE public.subscription_status_enum AS ENUM ('free', 'pro', 'inactive');
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'subscription_status_enum') THEN
+        CREATE TYPE public.subscription_status_enum AS ENUM ('free', 'pro', 'inactive');
+    END IF;
+END$$;
 
 -- Create the profiles table
 CREATE TABLE public.profiles (
