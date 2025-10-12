@@ -23,6 +23,7 @@ import {
   MessageSquarePlus,
   Zap,
   Shield,
+  Users2,
 } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
@@ -111,18 +112,32 @@ export const AppSidebar = () => {
             </SidebarMenuItem>
           ))}
           {profile?.role === 'admin' && (
-            <SidebarMenuItem>
-              <SidebarMenuButton
-                asChild
-                isActive={isLinkActive('/admin')}
-                tooltip="Painel Admin"
-              >
-                <Link to="/admin">
-                  <Shield className="h-5 w-5" />
-                  <span>Painel Admin</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+            <>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={isLinkActive('/admin')}
+                  tooltip="Painel Admin"
+                >
+                  <Link to="/admin">
+                    <Shield className="h-5 w-5" />
+                    <span>Painel Admin</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={isLinkActive('/settings/users')}
+                  tooltip="Usuários"
+                >
+                  <Link to="/settings/users">
+                    <Users2 className="h-5 w-5" />
+                    <span>Usuários</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </>
           )}
         </SidebarMenu>
         <SidebarFooter>
@@ -130,7 +145,9 @@ export const AppSidebar = () => {
             <SidebarMenuItem>
               <SidebarMenuButton
                 asChild
-                isActive={isLinkActive('/settings')}
+                isActive={
+                  isLinkActive('/settings') && !isLinkActive('/settings/users')
+                }
                 tooltip="Configurações"
               >
                 <Link to="/settings">

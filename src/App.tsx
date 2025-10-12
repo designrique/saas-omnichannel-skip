@@ -13,6 +13,8 @@ import { ProtectedRoute } from './components/ProtectedRoute'
 import { PublicRoute } from './components/PublicRoute'
 import { AdminRoute } from './components/AdminRoute'
 import AdminDashboardPage from './pages/app/AdminDashboard'
+import SettingsPage from './pages/app/settings/SettingsPage'
+import UsersPage from './pages/app/settings/UsersPage'
 
 const PlaceholderPage = ({ title }: { title: string }) => (
   <div className="flex items-center justify-center h-full">
@@ -99,12 +101,10 @@ const App = () => (
                 path="/automations"
                 element={<PlaceholderPage title="Automações" />}
               />
-              <Route
-                path="/settings"
-                element={<PlaceholderPage title="Configurações" />}
-              />
+              <Route path="/settings" element={<SettingsPage />} />
               <Route element={<AdminRoute />}>
                 <Route path="/admin" element={<AdminDashboardPage />} />
+                <Route path="/settings/users" element={<UsersPage />} />
               </Route>
             </Route>
           </Route>
