@@ -33,6 +33,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { signOut } from '@/services/auth'
+import { useAuth } from '@/contexts/AuthProvider'
 
 const menuItems = [
   { path: '/', icon: LayoutDashboard, label: 'Dashboard' },
@@ -53,9 +54,20 @@ const menuItems = [
   { path: '/automations', icon: Bot, label: 'Automações' },
 ]
 
+const getInitials = (name: string | null | undefined) => {
+  if (!name) return 'U'
+  return name
+    .split(' ')
+    .map((n) => n[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase()
+}
+
 export const AppSidebar = () => {
   const location = useLocation()
   const navigate = useNavigate()
+  const { profile } = useAuth()
 
   const handleLogout = async () => {
     await signOut()
@@ -117,12 +129,16 @@ export const AppSidebar = () => {
                 <DropdownMenuTrigger asChild>
                   <div className="flex items-center gap-3 p-2 rounded-md hover:bg-accent cursor-pointer w-full">
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src="https://img.usecurling.com/ppl/thumbnail?gender=male&seed=1" />
-                      <AvatarFallback>JP</AvatarFallback>
+                      <AvatarImage
+                        src={`https://img.usecurling.com/ppl/thumbnail?seed=${profile?.id}`}
+                      />
+                      <AvatarFallback>
+                        {getInitials(profile?.full_name)}
+                      </AvatarFallback>
                     </Avatar>
                     <div className="text-left overflow-hidden">
                       <p className="font-semibold text-sm truncate">
-                        João Pedro
+                        {profile?.full_name ?? 'Usuário'}
                       </p>
                     </div>
                   </div>

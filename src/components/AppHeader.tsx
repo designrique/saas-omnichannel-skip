@@ -13,6 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useSidebar } from '@/components/ui/sidebar'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { signOut } from '@/services/auth'
+import { useAuth } from '@/contexts/AuthProvider'
 
 const pageTitles: { [key: string]: string } = {
   '/': 'Dashboard',
@@ -30,10 +31,21 @@ const pageTitles: { [key: string]: string } = {
   '/quick-message': 'Enviar Mensagem',
 }
 
+const getInitials = (name: string | null | undefined) => {
+  if (!name) return 'U'
+  return name
+    .split(' ')
+    .map((n) => n[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase()
+}
+
 export const AppHeader = () => {
   const { toggleSidebar } = useSidebar()
   const location = useLocation()
   const navigate = useNavigate()
+  const { profile } = useAuth()
   const title = pageTitles[location.pathname] || 'SaaS Omnichannel'
 
   const handleLogout = async () => {
@@ -78,10 +90,10 @@ export const AppHeader = () => {
           >
             <Avatar>
               <AvatarImage
-                src="https://img.usecurling.com/ppl/thumbnail?gender=male&seed=1"
+                src={`https://img.usecurling.com/ppl/thumbnail?seed=${profile?.id}`}
                 alt="Avatar do usuário"
               />
-              <AvatarFallback>JP</AvatarFallback>
+              <AvatarFallback>{getInitials(profile?.full_name)}</AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
