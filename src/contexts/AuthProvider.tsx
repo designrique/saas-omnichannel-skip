@@ -23,63 +23,59 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
   const [profile, setProfile] = useState<Profile | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [authLoading, setAuthLoading] = useState(true)
+  const [profileLoading, setProfileLoading] = useState(true)
 
   useEffect(() => {
-    const fetchSession = async () => {
-      setIsLoading(true)
-      const {
-        data: { session },
-      } = await supabase.auth.getSession()
+    supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
       setUser(session?.user ?? null)
-
-      if (session?.user) {
-        const { data: profileData, error } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', session.user.id)
-          .single()
-
-        if (error && error.code !== 'PGRST116') {
-          console.error('Error fetching profile:', error)
-        }
-        setProfile(profileData)
-      }
-      setIsLoading(false)
-    }
-
-    fetchSession()
-
-    const {
-      data: { subscription: authListener },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      setSession(session)
-      const currentUser = session?.user ?? null
-      setUser(currentUser)
-
-      if (currentUser) {
-        const { data: profileData, error } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', currentUser.id)
-          .single()
-
-        if (error && error.code !== 'PGRST116') {
-          console.error('Error fetching profile on auth change:', error)
-          setProfile(null)
-        } else {
-          setProfile(profileData)
-        }
-      } else {
-        setProfile(null)
-      }
-      setIsLoading(false)
+      setAuthLoading(false)
     })
 
-    return () => {
-      authListener.unsubscribe()
-    }
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+      setUser(session?.user ?? null)
+      if (!session?.user) {
+        setProfile(null)
+      }
+      setAuthLoading(false)
+    })
+
+    return () => subscription.unsubscribe()
   }, [])
+
+  useEffect(() => {
+    if (user) {
+      setProfileLoading(true)
+      supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single()
+        .then(({ data, error }) => {
+          if (error && error.code !== 'PGRST116') {
+            console.error('Error fetching profile:', error)
+            setProfile(null)
+          } else {
+            setProfile(data)
+          }
+          setProfileLoading(false)
+        })
+    } else {
+      setProfileLoading(false)
+    }
+  }, [user])
+
+  useEffect(() => {
+    if (!authLoading && !profileLoading) {
+      setIsLoading(false)
+    } else {
+      setIsLoading(true)
+    }
+  }, [authLoading, profileLoading])
 
   const value = { session, user, profile, isLoading }
 
