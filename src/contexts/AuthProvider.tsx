@@ -24,7 +24,31 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    setIsLoading(true)
+    const fetchSession = async () => {
+      setIsLoading(true)
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+      setSession(session)
+      setUser(session?.user ?? null)
+
+      if (session?.user) {
+        const { data: profileData, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single()
+
+        if (error && error.code !== 'PGRST116') {
+          console.error('Error fetching profile:', error)
+        }
+        setProfile(profileData)
+      }
+      setIsLoading(false)
+    }
+
+    fetchSession()
+
     const {
       data: { subscription: authListener },
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
@@ -33,34 +57,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setUser(currentUser)
 
       if (currentUser) {
-        const { data: profileData, error: profileError } = await supabase
+        const { data: profileData, error } = await supabase
           .from('profiles')
           .select('*')
           .eq('id', currentUser.id)
           .single()
 
-        if (profileData) {
-          setProfile(profileData)
-        } else if (profileError && profileError.code === 'PGRST116') {
-          const { data: newProfile, error: insertError } = await supabase
-            .from('profiles')
-            .insert({
-              id: currentUser.id,
-              full_name: currentUser.user_metadata.full_name,
-              subscription_status: 'free',
-            })
-            .select()
-            .single()
-
-          if (insertError) {
-            console.error('Error creating profile:', insertError)
-            setProfile(null)
-          } else {
-            setProfile(newProfile)
-          }
-        } else if (profileError) {
-          console.error('Error fetching profile:', profileError)
+        if (error && error.code !== 'PGRST116') {
+          console.error('Error fetching profile on auth change:', error)
           setProfile(null)
+        } else {
+          setProfile(profileData)
         }
       } else {
         setProfile(null)
