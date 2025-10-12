@@ -101,10 +101,14 @@ const App = () => (
                 path="/automations"
                 element={<PlaceholderPage title="Automações" />}
               />
-              <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/settings">
+                <Route index element={<SettingsPage />} />
+                <Route element={<AdminRoute />}>
+                  <Route path="users" element={<UsersPage />} />
+                </Route>
+              </Route>
               <Route element={<AdminRoute />}>
                 <Route path="/admin" element={<AdminDashboardPage />} />
-                <Route path="/settings/users" element={<UsersPage />} />
               </Route>
             </Route>
           </Route>
